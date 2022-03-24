@@ -17,7 +17,7 @@ all: clean init
 	mkdir --parents $(PWD)/build/Boilerplate.AppDir/msedge
 	$(PWD)/bin/Apprepo.AppImage --destination=$(PWD)/build appdir boilerplate libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libreadline8 at-spi2-core
 
-	wget --output-document=$(PWD)/build/build.rpm https://packages.microsoft.com/yumrepos/edge/microsoft-edge-stable-96.0.1054.34-1.x86_64.rpm
+	wget --output-document=$(PWD)/build/build.rpm https://packages.microsoft.com/yumrepos/edge/microsoft-edge-stable-99.0.1150.46-1.x86_64.rpm
 	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
 
 	cp --force --recursive $(PWD)/build/usr/share/*			            $(PWD)/build/Boilerplate.AppDir/share
