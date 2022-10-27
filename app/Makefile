@@ -18,26 +18,20 @@ all: clean init
 	$(PWD)/bin/Apprepo.AppImage --destination=$(PWD)/build appdir boilerplate \
 	    libgdk-pixbuf2.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk2.0-0 \
 	    libreadline8 at-spi2-core libpango-1.0-0 libselinux1 libbotan-2-12 \
-	    libgtk-3-0 libwayland-cursor0
+	    libgtk-3-0 libwayland-cursor0 
 
-	wget --output-document=$(PWD)/build/build.rpm https://packages.microsoft.com/yumrepos/edge/microsoft-edge-stable-99.0.1150.46-1.x86_64.rpm
-	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
+	cp --recursive --force /opt/microsoft/msedge/*  $(PWD)/build/Boilerplate.AppDir/msedge/
 
-	cp --force --recursive $(PWD)/build/usr/share/*			            $(PWD)/build/Boilerplate.AppDir/share
-	cp --force --recursive $(PWD)/build/opt/microsoft/msedge*/* 	    $(PWD)/build/Boilerplate.AppDir/msedge
+	echo "LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}:\$${APPDIR}/msedge"    >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo "export LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}"                >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo "" 		                                                  >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo "" 		                                                  >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo "exec \$${APPDIR}/msedge/microsoft-edge \$${@}" 		      >> $(PWD)/build/Boilerplate.AppDir/AppRun
 
-	chmod 4755 $(PWD)/build/Boilerplate.AppDir/msedge/msedge-sandbox
-	chmod 4755 $(PWD)/build/Boilerplate.AppDir/msedge/msedge
-
-	echo "LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}:\$${APPDIR}/msedge" 	>> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "export LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}" 				>> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" 		                                                >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" 		                                                >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "exec \$${APPDIR}/msedge/msedge \$${@}" 		            >> $(PWD)/build/Boilerplate.AppDir/AppRun
-
-	rm -f $(PWD)/build/Boilerplate.AppDir/*.desktop 		|| true
-	rm -f $(PWD)/build/Boilerplate.AppDir/*.png 		  	|| true
-	rm -f $(PWD)/build/Boilerplate.AppDir/*.svg 		  	|| true
+	rm --force $(PWD)/build/Boilerplate.AppDir/*.desktop 		      || true
+	rm --force $(PWD)/build/Boilerplate.AppDir/*.png 		  	      || true
+	rm --force $(PWD)/build/Boilerplate.AppDir/*.svg 		  	      || true
+	rm --force $(PWD)/build/Boilerplate.AppDir/lib64/libstdc++.so.6*  || true
 
 	cp --force $(PWD)/AppDir/*.desktop 			$(PWD)/build/Boilerplate.AppDir/ || true
 	cp --force $(PWD)/AppDir/*.png 				$(PWD)/build/Boilerplate.AppDir/ || true

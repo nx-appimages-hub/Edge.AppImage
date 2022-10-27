@@ -13,10 +13,17 @@ FROM ubuntu:20.04
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-RUN apt-get -y update && apt-get -y install apt-utils
-RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get install -y kmod make gcc wget
+RUN apt-get -y update
+RUN apt-get -y install apt-utils
+RUN apt-get -y upgrade
+
+RUN apt-get install -y kmod make gcc wget gnupg
 RUN apt-get install -y rpm2cpio cpio
 RUN apt-get install -y fuse
 RUN apt-get install -y file
 
+RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://packages.microsoft.com/repos/edge/ stable main" >> /etc/apt/sources.list.d/microsoft_edge.list'
+RUN apt update
+
+RUN apt-get install -y microsoft-edge-stable
